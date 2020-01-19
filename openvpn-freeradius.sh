@@ -69,7 +69,7 @@ source ./vars
 ./build-ca
 ./build-key-server server
 ./build-dh
-./build-key $USER ### It might be changable
+./build-key $USER ###
 
 echo "
 port 443
@@ -87,7 +87,7 @@ ifconfig-pool-persist ipp.txt persist-key
 persist-tun
 keepalive 10 60
 reneg-sec 0
-comp-lzo
+ #comp-lzo # was insecure 
 tun-mtu 1468
 tun-mtu-extra 32
 mssfix 1400
@@ -229,3 +229,4 @@ USER_KEY_MAKER
 SERVER_NETWORK_CONFIG
 [ "$1" == rad ]&& FREE_RADIUS_INSTALLER
 }
+main
