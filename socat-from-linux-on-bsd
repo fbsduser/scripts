@@ -1,0 +1,7 @@
+#!/usr/local/bin/bash
+connect(){
+socat  pty,link=/dev/cuaU0,raw,user="YOUR LOCAL USER",group=dialer,mode=777 tcp:SOURCEIP:SOURCE PORT|| connect
+}
+connect
+### You have a mchine with special usb connect - anything - 
+### @ the other side meanse source ip you have a listened ser2net forwarding your usb....
