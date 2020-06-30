@@ -1,4 +1,4 @@
-!#/usr/local/bin/bash
+#!/usr/local/bin/bash
 [ "`env | grep proxy`" ]&& unset http_proxy && unset https_proxy
 #pkg upgrade -y
 ###################
