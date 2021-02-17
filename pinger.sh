@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 #### ping ipv4 by number of ip ! lol tzvz
+#(root : rpi3 01:21 AM )-(jobs:0)-(~)
+#(! 502)-> bash pinger.sh 8.8.8.0 23
+#9 bytes from 8.8.8.8: icmp_seq=1 ttl=109
+# [INPUT IP : 8.8.8.0]   [INT IP tmp : 134744064]  [ First decode DEC IP :8.8.8.0 ]  [END IP 8.8.8.23] 
+ 
 ip_oct=$1   #### first ip    
 range=$2    #### how mamny ip do you have 
 dec_ip=$(echo $ip_oct | tr . '\n' | awk '{s = s*256 + $1} END{print s}') #### the origin 
