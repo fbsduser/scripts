@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### by t4z3v4r3d ###
-[ "`id -u`" != "0" ]&& echo -e  "\033[1;31m $0 cant run as $USER Please Give me root perms!!!!! \033[0;0m" && exit 1
+[ "`id -u`" != "0" ]&& echo -e  "\033[1;31m $0 can't run as $USER Please Give me root perms!!!!! \033[0;0m" && exit 1
 [ lsof ]|| echo "LSOF NOT FOUND ! exit 1;" || exit 1 
 [ $# -lt 2 ] && echo "usage : $0 \"your ip \" \"Your fake ip \"" && exit 1 
 ip=$1
