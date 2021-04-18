@@ -19,7 +19,7 @@ for i in {1..4}; do #### dec to oct
     s1='.'$((end_ip%256))$s1 && ((end_ip>>=8))
 done
 
-for  ((item=$dec_tmp;item<$total;item++));do
+for  item in `seq $dec_tmp $total`;do
    # echo $item $dec_tmp $total
     tmp_item=$item
     for i in {1..4}; do #### dec to oct
