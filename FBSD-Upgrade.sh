@@ -11,7 +11,7 @@ cd $path
 
 kern(){
 echo "Kernel Upgrade proc ..."
-krn_name="`uname -v|cut -d "/" -f 8`"
+krn_name="`uname -v|cut -d "/" -f 8| cut -d " " -f 4`"
 cd /usr/src/ &&  make buildkernel KERNCONF=$krn_name && make installkernel KERNCONF=$krn_name && exit
 }
 
