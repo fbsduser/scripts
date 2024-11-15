@@ -7,9 +7,9 @@
 rhost=$1
 server_port=22
 evil_ip_range="Put evil(s) ip range here, Some private  range like 10.0.0.0/8 or maybe 172.... or 192... comment for me"
-[ -f ~/range ] && (echo -e "\033[1;31m Ip file not found !. Script is failed !;( \033[0;0m" ;exit)
+[ ! -f ~/range ] && (echo -e "\033[1;31m Ip file not found !. Script is failed !;( \033[0;0m" ;exit)
 echo -e  "\033[1;37m $(figlet routing ...)\033[0m"
-
+### :-p
 bsd_style(){
 route add -net $evil_ip_range 127.0.0.1 >>/dev/null 2>&1  127.0.0.1 
 /etc/rc.d/pf onestart   ||  touch /etc/pf.conf &&  /etc/rc.d/pf onestart >/dev/null 2>&1  127.0.0.1 
